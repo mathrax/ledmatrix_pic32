@@ -197,10 +197,6 @@ void __ISR(_UART_1_VECTOR, IPL1) U1RXHandler(void) {
                 || RcvData == 'U' || RcvData == 'D'
                 || RcvData == 'L' || RcvData == 'R'
 
-                //                || RcvData == 'a' || RcvData == 'b'   //L1
-                //                || RcvData == 'c' || RcvData == 'd'   //L2
-                //                || RcvData == 'e' || RcvData == 'f'   //L3
-
                 || RcvData == 'g' //STK-L LEFT
                 || RcvData == 'h' //STK-L RIGHT
                 || RcvData == 'i' //STK-L UP
