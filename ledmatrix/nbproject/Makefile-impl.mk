@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=pic32_ledmatrix_20160216_1
+PROJECTNAME=ledmatrix
 
 # Active Configuration
 DEFAULTCONF=default
