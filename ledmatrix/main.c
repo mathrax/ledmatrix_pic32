@@ -490,15 +490,15 @@ int main(void) {
                 } else {
                     if (frameCount % 300 == 0) {
                         aCnt++;
-                        if (aCnt >= sizeof (frameE_1) / sizeof (unsigned char)) {
-                            aCnt = sizeof (frameE_1) / sizeof (unsigned char) - 1;
+                        if (aCnt >= sizeof (frameE_2) / sizeof (unsigned char)) {
+                            aCnt = sizeof (frameE_2) / sizeof (unsigned char) - 1;
                         }
                     }
                 }
                 for (i = 0; i < 256; i++) {
-                    r[i] = (((animationE[frameE_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationE[frameE_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationE[frameE_1[aCnt]][i]) & 0b11) > count);
+                    r[i] = (((animationE[frameE_2[aCnt]][i] >> 4) & 0b11) > count);
+                    g[i] = (((animationE[frameE_2[aCnt]][i] >> 2) & 0b11) > count);
+                    b[i] = (((animationE[frameE_2[aCnt]][i]) & 0b11) > count);
                 }
                 break;
 
