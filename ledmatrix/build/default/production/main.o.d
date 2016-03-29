@@ -12,4 +12,5 @@ animationI.h  \
 animationJ.h  \
 animationK.h  \
 animationL.h  \
- pattern.h 
+ animationM.h  \
+pattern.h 

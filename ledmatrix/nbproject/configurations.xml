@@ -17,6 +17,7 @@
       <itemPath>animationJ.h</itemPath>
       <itemPath>animationK.h</itemPath>
       <itemPath>animationL.h</itemPath>
+      <itemPath>animationM.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerFiles"
                    displayName="Linker Files"

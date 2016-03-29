@@ -38,6 +38,7 @@
 #include "animationJ.h"
 #include "animationK.h"
 #include "animationL.h"
+#include "animationM.h"
 
 #include "pattern.h"
 
@@ -482,7 +483,7 @@ int main(void) {
 
                 //STK-L DOWN
             case 'j':
-                //Egg
+                //Cup
                 if (firstReset == 0) {
                     firstReset = 1;
                     frameCount = 0;
@@ -490,15 +491,15 @@ int main(void) {
                 } else {
                     if (frameCount % 300 == 0) {
                         aCnt++;
-                        if (aCnt >= sizeof (frameE_2) / sizeof (unsigned char)) {
-                            aCnt = sizeof (frameE_2) / sizeof (unsigned char) - 1;
+                        if (aCnt >= sizeof (frameM_1) / sizeof (unsigned char)) {
+                            aCnt = sizeof (frameM_1) / sizeof (unsigned char) - 1;
                         }
                     }
                 }
                 for (i = 0; i < 256; i++) {
-                    r[i] = (((animationE[frameE_2[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationE[frameE_2[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationE[frameE_2[aCnt]][i]) & 0b11) > count);
+                    r[i] = (((animationM[frameM_1[aCnt]][i] >> 4) & 0b11) > count);
+                    g[i] = (((animationM[frameM_1[aCnt]][i] >> 2) & 0b11) > count);
+                    b[i] = (((animationM[frameM_1[aCnt]][i]) & 0b11) > count);
                 }
                 break;
 
