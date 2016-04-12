@@ -18,7 +18,7 @@
 #pragma config CP       = OFF           // Code Protect
 #pragma config BWP      = ON            // Boot Flash Write Protect
 #pragma config PWP      = OFF           // Program Flash Write Protect
-#pragma config ICESEL   = ICS_PGx3      // ICE/ICD Comm Channel Select
+#pragma config ICESEL   = ICS_PGx1      // ICE/ICD Comm Channel Select
 #pragma config JTAGEN   = OFF           // JTAG Enable
 
 #define SYSCLK 64000000L
@@ -39,6 +39,7 @@
 #include "animationK.h"
 #include "animationL.h"
 #include "animationM.h"
+#include "animationN.h"
 
 #include "pattern.h"
 
@@ -209,7 +210,7 @@ void __ISR(_UART_1_VECTOR, IPL1) U1RXHandler(void) {
                 || RcvData == 'n' //STK-R DOWN
                 ) {
             myData[dataPos] = RcvData;
-            if (RcvData == 'k' || RcvData=='D') {
+            if (RcvData == 'k' || RcvData == 'D') {
 
                 firstReset = 0;
             } else {
@@ -223,6 +224,36 @@ void __ISR(_UART_1_VECTOR, IPL1) U1RXHandler(void) {
     }
     lastData = myData[0];
 }
+
+void setPicture(const unsigned char * picture) {
+    int i;
+    for (i = 0; i < 256; i++) {
+        r[i] = (((picture[i] >> 4) & 0b11) > count);
+        g[i] = (((picture[i] >> 2) & 0b11) > count);
+        b[i] = (((picture[i]) & 0b11) > count);
+    }
+}
+
+
+//void setAnimation(const unsigned char *animation, const unsigned char * frame) {
+//    int i;
+//    
+//    if (firstReset == 0) {
+//        firstReset = 1;
+//        frameCount = 0;
+//        aCnt = 0;
+//    } else {
+//        if (frameCount % 200 == 0) {
+//            aCnt++;
+//            if (aCnt >= sizeof (frame) / sizeof (unsigned char)) {
+//                aCnt = 0;
+//            }
+//        }
+//    }
+//
+//    setPicture(&animation[frame[aCnt]]);
+//
+//}
 
 int main(void) {
     int i;
@@ -241,7 +272,7 @@ int main(void) {
     InitUart1();
 
     resetAnimation();
-    //    myData[0] = 'k';
+
     while (1) {
 
         count++;
@@ -272,35 +303,13 @@ int main(void) {
                         }
                     }
                 }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationK[frameK_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationK[frameK_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationK[frameK_1[aCnt]][i]) & 0b11) > count);
-                }
+                setPicture(animationK[frameK_1[aCnt]]);
+                
                 break;
 
                 //DOWN
-                //HANABI
             case 'D':
-                if (firstReset == 0) {
-                    firstReset = 1;
-
-                    frameCount = 0;
-                    aCnt = 0;
-                } else {
-                    if (frameCount % 200 == 0) {
-                        aCnt++;
-                        if (aCnt >= sizeof (frameL_1) / sizeof (unsigned char)) {
-                            aCnt = sizeof (frameL_1) / sizeof (unsigned char) - 1;
-                            myData[0] = 0;
-                        }
-                    }
-                }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationL[frameL_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationL[frameL_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationL[frameL_1[aCnt]][i]) & 0b11) > count);
-                }
+                setPicture(GANBARE_EX);
                 break;
 
 
@@ -320,11 +329,8 @@ int main(void) {
                         }
                     }
                 }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationD[frameD_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationD[frameD_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationD[frameD_1[aCnt]][i]) & 0b11) > count);
-                }
+                
+                setPicture(animationD[frameD_1[aCnt]]);
                 break;
 
                 //RIGHT 
@@ -339,17 +345,12 @@ int main(void) {
                     if (frameCount % 200 == 0) {
                         aCnt++;
                         if (aCnt >= sizeof (frameB_1) / sizeof (unsigned char)) {
-                            //aCnt = sizeof (frameB_1) / sizeof (unsigned char)-1;
                             aCnt = 0;
-                            //                            myData[0] = 0;
                         }
                     }
                 }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationB[frameB_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationB[frameB_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationB[frameB_1[aCnt]][i]) & 0b11) > count);
-                }
+                
+                setPicture(animationB[frameB_1[aCnt]]);
                 break;
 
 
@@ -366,95 +367,32 @@ int main(void) {
                 //SANKAKU
                 //BATSU
             case 'G':
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((batsu[i] >> 4) & 0b11) > count);
-                    g[i] = (((batsu[i] >> 2) & 0b11) > count);
-                    b[i] = (((batsu[i]) & 0b11) > count);
-                }
+                setPicture(batsu);
                 break;
 
                 //MARU
                 //HATENA?
             case 'O':
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((hatena[i] >> 4) & 0b11) > count);
-                    g[i] = (((hatena[i] >> 2) & 0b11) > count);
-                    b[i] = (((hatena[i]) & 0b11) > count);
-                }
+                setPicture(hatena);
                 break;
 
                 //SIKAKU
                 //BREAK HEART
             case 'P':
-
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((break_heart[i] >> 4) & 0b11) > count);
-                    g[i] = (((break_heart[i] >> 2) & 0b11) > count);
-                    b[i] = (((break_heart[i]) & 0b11) > count);
-                }
+                setPicture(break_heart);
                 break;
 
                 //STK-L LEFT
                 //WAVE
             case 'g':
-                //WAVE  //2016-02-17
-                if (firstReset == 0) {
-                    firstReset = 1;
-                    frameCount = 0;
-                    aCnt = 0;
-                } else {
-                    if (frameCount % 150 == 0) {
-                        aCnt++;
-                        if (aCnt >= sizeof (frameJ_1) / sizeof (unsigned char)) {
-                            aCnt = 0;
-                        }
-                    }
-                }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationJ[frameJ_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationJ[frameJ_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationJ[frameJ_1[aCnt]][i]) & 0b11) > count);
-                }
-                //                if (firstReset == 0) {
-                //                    firstReset = 1;
-                //
-                //                    frameCount = 0;
-                //                    aCnt = 0;
-                //                } else {
-                //                    if (frameCount % 250 == 0) {
-                //                        aCnt++;
-                //                        if (aCnt >= sizeof (frameA_2) / sizeof (unsigned char) - 1) {
-                //                            aCnt = sizeof (frameA_2) / sizeof (unsigned char) - 1;
-                //                        }
-                //                    }
-                //                }
-                //                for (i = 0; i < 256; i++) {
-                //                    r[i] = (((animationA[frameA_2[aCnt]][i] >> 4) & 0b11) > count);
-                //                    g[i] = (((animationA[frameA_2[aCnt]][i] >> 2) & 0b11) > count);
-                //                    b[i] = (((animationA[frameA_2[aCnt]][i]) & 0b11) > count);
-                //                }
+                setPicture(GANBARE_G);
+                
                 break;
                 //STK-L RIGHT
                 //ENERGY
             case 'h':
-                if (firstReset == 0) {
-                    firstReset = 1;
+                setPicture(GANBARE_A);
 
-                    frameCount = 0;
-                    aCnt = 0;
-                } else {
-                    if (frameCount % 250 == 0) {
-                        aCnt++;
-                        if (aCnt >= sizeof (frameA_1) / sizeof (unsigned char)) {
-                            aCnt = sizeof (frameA_1) / sizeof (unsigned char) - 1;
-                        }
-                    }
-                }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationA[frameA_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationA[frameA_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationA[frameA_1[aCnt]][i]) & 0b11) > count);
-                }
                 break;
 
                 //STK-L UP
@@ -474,122 +412,32 @@ int main(void) {
                         }
                     }
                 }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationF[frameF_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationF[frameF_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationF[frameF_1[aCnt]][i]) & 0b11) > count);
-                }
+                setPicture(animationF[frameF_1[aCnt]]);
                 break;
 
                 //STK-L DOWN
             case 'j':
-                //Cup
-                if (firstReset == 0) {
-                    firstReset = 1;
-                    frameCount = 0;
-                    aCnt = 0;
-                } else {
-                    if (frameCount % 300 == 0) {
-                        aCnt++;
-                        if (aCnt >= sizeof (frameM_1) / sizeof (unsigned char)) {
-                            aCnt = sizeof (frameM_1) / sizeof (unsigned char) - 1;
-                        }
-                    }
-                }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationM[frameM_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationM[frameM_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationM[frameM_1[aCnt]][i]) & 0b11) > count);
-                }
+                setPicture(GANBARE_N);
                 break;
 
                 //STK-R LEFT
-                //RAIBOW - LEFT
             case 'k':
-                if (firstReset == 0) {
-                    firstReset = 1;
-                    frameCount = 0;
-                    aCnt = 0;
-                } else {
-                    if (frameCount % 250 == 0) {
-                        aCnt++;
-                        if (aCnt >= sizeof (frameG_1) / sizeof (unsigned char)) {
-                            aCnt = sizeof (frameG_1) / sizeof (unsigned char) - 1;
-                        }
-                    }
-                }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationG[frameG_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationG[frameG_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationG[frameG_1[aCnt]][i]) & 0b11) > count);
-                }
+                setPicture(GANBARE_B);
                 break;
 
                 //STK-R RIGHT
-                //RAIBOW - RIGHT
             case 'l':
-                if (firstReset == 0) {
-                    firstReset = 1;
-                    frameCount = 0;
-                    aCnt = 0;
-                } else {
-                    if (frameCount % 250 == 0) {
-                        aCnt++;
-                        if (aCnt >= sizeof (frameC_1) / sizeof (unsigned char)) {
-                            aCnt = sizeof (frameC_1) / sizeof (unsigned char) - 1;
-                        }
-                    }
-                }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationC[frameC_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationC[frameC_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationC[frameC_1[aCnt]][i]) & 0b11) > count);
-                }
+                setPicture(GANBARE_A);
                 break;
 
                 //STK-R UP
             case 'm':
-                //GURUGURU
-                if (firstReset == 0) {
-                    firstReset = 1;
-                    frameCount = 0;
-                    aCnt = 0;
-                } else {
-                    if (frameCount % 125 == 0) {
-                        aCnt++;
-                        if (aCnt >= sizeof (frameI_1) / sizeof (unsigned char)) {
-                            aCnt = 0;
-                            //                            aCnt = sizeof (frameI_1) / sizeof (unsigned char) - 1;
-                        }
-                    }
-                }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationI[frameI_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationI[frameI_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationI[frameI_1[aCnt]][i]) & 0b11) > count);
-                }
+                setPicture(GANBARE_R);
                 break;
 
                 //STK-R DOWN
             case 'n':
-                //CHOU v2
-                if (firstReset == 0) {
-                    firstReset = 1;
-                    frameCount = 0;
-                    aCnt = 0;
-                } else {
-                    if (frameCount % 300 == 0) {
-                        aCnt++;
-                        if (aCnt >= sizeof (frameH_1) / sizeof (unsigned char)) {
-                            aCnt = sizeof (frameH_1) / sizeof (unsigned char) - 1;
-                        }
-                    }
-                }
-                for (i = 0; i < 256; i++) {
-                    r[i] = (((animationH[frameE_1[aCnt]][i] >> 4) & 0b11) > count);
-                    g[i] = (((animationH[frameE_1[aCnt]][i] >> 2) & 0b11) > count);
-                    b[i] = (((animationH[frameE_1[aCnt]][i]) & 0b11) > count);
-                }
+                setPicture(GANBARE_E);
                 break;
         }
 
