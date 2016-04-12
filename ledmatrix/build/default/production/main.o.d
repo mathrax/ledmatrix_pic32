@@ -13,4 +13,5 @@ animationJ.h  \
 animationK.h  \
 animationL.h  \
  animationM.h  \
+animationN.h  \
 pattern.h 
